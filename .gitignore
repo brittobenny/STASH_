@@ -9,3 +9,5 @@ __pycache__/
 
 # Django database
 **/db.sqlite3
+
+stash_frontend/frontend/.env.production

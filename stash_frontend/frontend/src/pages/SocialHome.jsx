@@ -6,6 +6,8 @@ import RecipeFeed from '../components/RecipeFeed';
 import '../styles/global.css';
 import '../styles/social.css';
 
+const API_ORIGIN = (import.meta.env.VITE_API_URL || '/api').replace(/\/api\/?$/, '');
+
 const emptyForm = {
     title: '',
     caption: '',
@@ -43,7 +45,7 @@ const SocialHome = () => {
             const safeImage = normalizeImagePath(parsed.image);
             setDisplayName(safeName || 'Stash chef');
             if (safeImage) {
-                setProfileImage(safeImage.startsWith('http') ? safeImage : `http://127.0.0.1:8000${safeImage}`);
+                setProfileImage(safeImage.startsWith('http') ? safeImage : `${API_ORIGIN}${safeImage}`);
             } else {
                 setProfileImage(null);
             }

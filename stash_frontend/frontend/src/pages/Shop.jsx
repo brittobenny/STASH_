@@ -6,6 +6,8 @@ import { formatCurrency } from '../utils/currency';
 import '../styles/global.css';
 import '../styles/shop.css';
 
+const API_ORIGIN = (import.meta.env.VITE_API_URL || '/api').replace(/\/api\/?$/, '');
+
 const Shop = () => {
     const location = useLocation();
     const [shopProducts, setShopProducts] = useState([]);
@@ -216,7 +218,7 @@ const Shop = () => {
         if (!path.startsWith('/media/')) {
             path = `/media/${path.replace(/^\//, '')}`;
         }
-        return `http://127.0.0.1:8000${path}`;
+        return `${API_ORIGIN}${path}`;
     };
 
     const goToOrdersForFeedback = () => {

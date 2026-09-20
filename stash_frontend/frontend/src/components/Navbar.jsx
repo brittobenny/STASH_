@@ -5,6 +5,8 @@ import { accountService } from '../services/api';
 import { normalizeImagePath } from '../utils/normalize';
 import '../styles/global.css';
 
+const API_ORIGIN = (import.meta.env.VITE_API_URL || '/api').replace(/\/api\/?$/, '');
+
 const Navbar = () => {
     const navigate = useNavigate();
     const location = useLocation();
@@ -18,7 +20,7 @@ const Navbar = () => {
             const parsed = JSON.parse(rawUser);
             const img = normalizeImagePath(parsed?.image);
             if (img) {
-                profileImage = img.startsWith('http') ? img : `http://127.0.0.1:8000${img}`;
+                profileImage = img.startsWith('http') ? img : `${API_ORIGIN}${img}`;
             }
         }
     } catch {

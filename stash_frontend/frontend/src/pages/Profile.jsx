@@ -19,6 +19,8 @@ import { normalizeName, normalizeImagePath } from '../utils/normalize';
 import '../styles/global.css';
 import '../styles/profile.css';
 
+const API_ORIGIN = (import.meta.env.VITE_API_URL || '/api').replace(/\/api\/?$/, '');
+
 const Profile = () => {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
@@ -265,7 +267,7 @@ const Profile = () => {
     const profileImageSrc = normalizedImage
         ? String(normalizedImage).startsWith('http')
             ? normalizedImage
-            : `http://127.0.0.1:8000${normalizedImage}`
+            : `${API_ORIGIN}${normalizedImage}`
         : null;
 
     const completionScore = Math.round(
