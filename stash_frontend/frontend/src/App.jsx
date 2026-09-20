@@ -34,7 +34,7 @@ import './styles/global.css';
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/STASH_">
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
