@@ -30,16 +30,53 @@ const AdminShops = () => {
 
   const handleCreate = async (e) => {
     e.preventDefault();
-    setSaving(true);
     setError('');
     setSuccess('');
+
+    const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const PHONE_PATTERN = /^[0-9]{10}$/;
+
+    if (form.name.trim().length < 2) {
+      setError('Owner name must be at least 2 characters.');
+      return;
+    }
+    if (!EMAIL_PATTERN.test(form.email.trim())) {
+      setError('Please enter a valid email format.');
+      return;
+    }
+    if (form.password.length < 6) {
+      setError('Password must be at least 6 characters.');
+      return;
+    }
+    if (form.mobile_number && !PHONE_PATTERN.test(form.mobile_number.trim())) {
+      setError('Mobile number must be exactly 10 digits.');
+      return;
+    }
+    if (form.store_name.trim().length < 2) {
+      setError('Store name must be at least 2 characters.');
+      return;
+    }
+
+    setSaving(true);
     try {
       await adminService.createShopOwner(form);
       setSuccess('Shop owner created successfully.');
       setForm({ name: '', email: '', password: '', mobile_number: '', location: '', address: '', store_name: '' });
       load();
     } catch (err) {
-      setError(err.response?.data?.error || 'Failed to create shop owner.');
+      let msg = 'Failed to create shop owner.';
+      if (err.response?.data) {
+        if (typeof err.response.data === 'object' && !Array.isArray(err.response.data)) {
+            const keys = Object.keys(err.response.data);
+            if (keys.length > 0) {
+                const firstError = err.response.data[keys[0]];
+                msg = Array.isArray(firstError) ? firstError[0] : (err.response.data.error || JSON.stringify(err.response.data));
+            }
+        } else {
+            msg = err.response.data.error || JSON.stringify(err.response.data);
+        }
+      }
+      setError(msg);
     } finally {
       setSaving(false);
     }
@@ -64,16 +101,49 @@ const AdminShops = () => {
   const handleUpdate = async (e) => {
     e.preventDefault();
     if (!editingShop) return;
-    setUpdating(true);
     setError('');
     setSuccess('');
+
+    const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const PHONE_PATTERN = /^[0-9]{10}$/;
+
+    if (editForm.name && editForm.name.trim().length < 2) {
+      setError('Owner name must be at least 2 characters.');
+      return;
+    }
+    if (editForm.email && !EMAIL_PATTERN.test(editForm.email.trim())) {
+      setError('Please enter a valid email format.');
+      return;
+    }
+    if (editForm.mobile_number && !PHONE_PATTERN.test(editForm.mobile_number.trim())) {
+      setError('Mobile number must be exactly 10 digits.');
+      return;
+    }
+    if (editForm.store_name && editForm.store_name.trim().length < 2) {
+      setError('Store name must be at least 2 characters.');
+      return;
+    }
+
+    setUpdating(true);
     try {
       await adminService.updateUser(editingShop.id, editForm);
       setSuccess('Shop updated successfully.');
       closeEdit();
       load();
     } catch (err) {
-      setError(err.response?.data?.error || 'Failed to update shop.');
+      let msg = 'Failed to update shop.';
+      if (err.response?.data) {
+        if (typeof err.response.data === 'object' && !Array.isArray(err.response.data)) {
+            const keys = Object.keys(err.response.data);
+            if (keys.length > 0) {
+                const firstError = err.response.data[keys[0]];
+                msg = Array.isArray(firstError) ? firstError[0] : (err.response.data.error || JSON.stringify(err.response.data));
+            }
+        } else {
+            msg = err.response.data.error || JSON.stringify(err.response.data);
+        }
+      }
+      setError(msg);
     } finally {
       setUpdating(false);
     }

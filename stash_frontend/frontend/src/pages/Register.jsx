@@ -19,7 +19,7 @@ const Register = () => {
     const [loading, setLoading] = useState(false);
 
     const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const PHONE_PATTERN = /^[0-9]{10,15}$/;
+    const PHONE_PATTERN = /^[0-9]{10}$/;
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -35,7 +35,7 @@ const Register = () => {
             return;
         }
         if (!PHONE_PATTERN.test(formData.mobile_number.trim())) {
-            setError('Mobile number must be between 10 and 15 digits.');
+            setError('Mobile number must be exactly 10 digits.');
             return;
         }
 

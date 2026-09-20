@@ -27,6 +27,7 @@ const Profile = () => {
     const [savingProfile, setSavingProfile] = useState(false);
     const [profileImageFile, setProfileImageFile] = useState(null);
     const [showProfileEditor, setShowProfileEditor] = useState(false);
+    const [error, setError] = useState('');
     const [metrics, setMetrics] = useState({
         pantryCount: 0,
         ordersCount: 0,
@@ -190,8 +191,26 @@ const Profile = () => {
     const maxUsage = Math.max(...usage.map((u) => Number(u.quantity || 0)), 1);
 
     const handleProfileSave = async () => {
+        setError('');
+        
+        if (profileForm.name && profileForm.name.trim().length < 2) {
+            setError('Name must be at least 2 characters.');
+            return;
+        }
+        
+        const PHONE_PATTERN = /^[0-9]{10}$/;
+        if (profileForm.mobile_number && !PHONE_PATTERN.test(profileForm.mobile_number.trim())) {
+            setError('Mobile number must be exactly 10 digits.');
+            return;
+        }
+
+        if (profileForm.address && profileForm.address.trim().length < 3) {
+            setError('Address is too short. Please provide a valid address.');
+            return;
+        }
+
         setSavingProfile(true);
-        let shouldAlert = false;
+        let shouldAlert = true;
         try {
             await accountService.updateProfile({ ...profileForm, image: profileImageFile });
         } catch {
@@ -317,7 +336,7 @@ const Profile = () => {
                             </div>
                         </div>
                         <div className="profile-actions">
-                            <button className="btn-primary" onClick={() => setShowProfileEditor(true)}>
+                            <button className="btn-primary" onClick={() => { setError(''); setShowProfileEditor(true); }}>
                                 <Pencil size={16} /> Edit Profile
                             </button>
                             <button className="btn-secondary" onClick={() => navigate('/customer/orders')}>
@@ -356,7 +375,7 @@ const Profile = () => {
                                 upward this week.
                             </p>
                             <div className="hero-actions">
-                                <button className="btn-primary" onClick={() => setShowProfileEditor(true)}>
+                                <button className="btn-primary" onClick={() => { setError(''); setShowProfileEditor(true); }}>
                                     Update Profile
                                 </button>
                                 <button className="btn-secondary" onClick={() => navigate('/customer/shop')}>
@@ -502,6 +521,8 @@ const Profile = () => {
                                 <X size={16} />
                             </button>
                         </div>
+                        
+                        {error && <div style={{ color: '#dc2626', background: '#fee2e2', padding: '10px 15px', borderRadius: '8px', margin: '20px 20px 0', fontSize: '14px', fontWeight: '500' }}>{error}</div>}
 
                         <div className="modal-body">
                             <div className="upload-card">

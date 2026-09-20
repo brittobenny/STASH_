@@ -9,7 +9,7 @@ const roleConfig = {
         subtitle: 'Syncing your pantry, recipes, and nutrition insights.',
         accent: '#e11d2e',
         icon: CookingPot,
-        target: '/customer/home',
+        target: '/customer/inventory',
         badge: 'Customer Workspace',
     },
     shopowner: {
