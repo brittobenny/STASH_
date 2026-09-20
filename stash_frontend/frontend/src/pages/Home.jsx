@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, CheckCircle, Smartphone, ChefHat, Leaf, Sparkles, ShieldCheck, MapPin, Activity, ChevronDown } from 'lucide-react';
 
+const VIDEO_URL = `${import.meta.env.BASE_URL}assets/food.mp4`;
+
 const Home = () => {
     // Simple scroll reveal effect
     useEffect(() => {
@@ -94,8 +96,7 @@ const Home = () => {
             {/* SECTION 1: HERO (Video Background) */}
             <section id="top" style={styles.heroSection}>
                 <video autoPlay loop muted style={styles.video}>
-                    <source src="/assets/food.mp4" type="video/mp4" />
-                </video>
+<source src={VIDEO_URL} type="video/mp4" />                </video>
                 <div style={styles.overlay}></div>
                 <div style={styles.brand}>STASH</div>
                 <nav style={styles.heroNav}>
